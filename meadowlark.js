@@ -4,7 +4,7 @@ var fortune = require('./lib/fortune.js');
 var app = express();
 
 //set up handlebars view engine
-var handlebars = require('express3-handlebars').create({
+var handlebars = require('express-handlebars').create({
     defaultLayout: 'main',
     helpers: {
         section: function(name, options) {
@@ -87,6 +87,10 @@ app.get('/tours/oregon-coast', function(req, res) {
 
 app.get('/tours/request-group-rate', function(req, res) {
     res.render('tours/request-group-rate');
+});
+
+app.get('/jquery-test', function(req, res) {
+    res.render('jquery-test');
 });
 //404 catch-all handler (middleware)
 app.use(function(req, res, next) {
