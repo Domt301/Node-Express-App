@@ -24,6 +24,14 @@ app.set('port', process.env.PORT || 3000);
 
 app.use(express.static(__dirname + '/public'));
 
+
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js')); // redirect bootstrap JS
+app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect JS jQuery
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+
+
+app.use(require('body-parser').urlencoded({ extended: true }));
+
 app.use(function(req, res, next) {
     res.locals.showTests = app.get('env') !== 'production' &&
         req.query.test === '1';
@@ -105,6 +113,23 @@ app.get('/data/nursery-rhyme', function(req, res) {
         noun: 'heck',
     });
 });
+
+app.get('/newsletter', function(req, res) {
+    // we will learn about CSRF later...for now, we just
+    // provide a dummy value
+    res.render('newsletter', { csrf: 'CSRF token goes here' });
+});
+app.post('/process', function(req, res) {
+    if (req.xhr || req.accepts('json,html') === 'json') {
+        // if there were an error, we would send { error: 'error description' }
+        res.send({ success: true });
+    } else {
+        // if there were an error, we would redirect to an error page
+        res.redirect(303, '/thank-you');
+    }
+});
+
+
 //404 catch-all handler (middleware)
 app.use(function(req, res, next) {
     res.status(404);
